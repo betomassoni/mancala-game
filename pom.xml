@@ -22,6 +22,7 @@
         <module>mancala-rest-api</module>
         <module>mancala-service</module>
         <module>mancala-infrastructure</module>
+        <module>mancala-repository-redis</module>
     </modules>
 
     <properties>

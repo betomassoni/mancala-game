@@ -6,5 +6,5 @@ import br.com.robertomassoni.mancala.core.domain.SowPit;
 public interface GameService {
     Game createGame();
 
-    public Game sow(final SowPit sowPit);
+    Game sow(final SowPit sowPit);
 }

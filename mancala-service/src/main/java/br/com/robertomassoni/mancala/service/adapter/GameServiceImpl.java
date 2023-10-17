@@ -1,33 +1,36 @@
 package br.com.robertomassoni.mancala.service.adapter;
 
-import br.com.robertomassoni.mancala.core.domain.Board;
 import br.com.robertomassoni.mancala.core.domain.Game;
 import br.com.robertomassoni.mancala.core.domain.Pit;
 import br.com.robertomassoni.mancala.core.domain.SowPit;
 import br.com.robertomassoni.mancala.core.domain.enums.Player;
 import br.com.robertomassoni.mancala.core.exception.PlayerNotFoundException;
+import br.com.robertomassoni.mancala.core.repository.GamePersistence;
 import br.com.robertomassoni.mancala.core.service.GameService;
 import br.com.robertomassoni.mancala.service.factory.GameFactory;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
+@AllArgsConstructor
 public class GameServiceImpl implements GameService {
+
+    private final GamePersistence persistence;
 
     @Override
     public Game createGame() {
-        return GameFactory.createGame();
+        return persistence.save(GameFactory.createGame());
     }
 
     @Override
     public Game sow(final SowPit sowPit) {
-        final var game = createGameMock(sowPit.getGameId());
-        return sow(game, sowPit.getPlayer(), sowPit.getPitIndex(), 0);
+        final var game = persistence.findById(sowPit.getGameId());
+        final var result = sow(game, sowPit.getPlayer(), sowPit.getPitIndex(), 0);
+        return persistence.save(result);
     }
 
     @SneakyThrows
@@ -86,33 +89,6 @@ public class GameServiceImpl implements GameService {
             sow(game, opponentPlayer, 1, seedsToSow.get());
         }
 
-        return game;
-    }
-
-    private Game createGameMock(final UUID gameId) {
-        var boardPlayer1 = new Board()
-                .withPlayer(Player.PLAYER_1)
-                .withBigPit(new Pit(0, 0))
-                .withSmallPits(Arrays.asList(new Pit(1, 6),
-                        new Pit(2, 6),
-                        new Pit(3, 6),
-                        new Pit(4, 6),
-                        new Pit(5, 6),
-                        new Pit(6, 6)));
-        var boardPlayer2 = new Board()
-                .withPlayer(Player.PLAYER_2)
-                .withBigPit(new Pit(0, 0))
-                .withSmallPits(Arrays.asList(new Pit(1, 6),
-                        new Pit(2, 6),
-                        new Pit(3, 6),
-                        new Pit(4, 6),
-                        new Pit(5, 6),
-                        new Pit(6, 6)));
-
-        var game = new Game();
-        game.setId(gameId);
-        game.setPlayersBoard(Arrays.asList(boardPlayer1, boardPlayer2));
-        game.setPlayerTurn(Player.PLAYER_1);
         return game;
     }
 }
