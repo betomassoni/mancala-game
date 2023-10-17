@@ -1,10 +1,10 @@
 package br.com.robertomassoni.mancala.core.service;
 
 import br.com.robertomassoni.mancala.core.domain.Game;
-import br.com.robertomassoni.mancala.core.domain.enums.Player;
+import br.com.robertomassoni.mancala.core.domain.SowPit;
 
 public interface GameService {
-    Game createNew();
+    Game createGame();
 
-    Game play(Game game, Player player, Integer pitId, Integer opponentSeeds);
+    public Game sow(final SowPit sowPit);
 }

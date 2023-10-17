@@ -9,7 +9,5 @@ import java.util.Map;
 @Setter
 public class GameResponse {
     private String id;
-    private String playerTurn;
-    private String nextPlayer;
     private Map<String, BoardResponse> playersBoard;
 }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -21,19 +22,14 @@ public class GameFactory {
         return game;
     }
 
-    private static HashMap<Player, Board> createPlayersBoard() {
+    private static List<Board> createPlayersBoard() {
         var boardPlayer1 = createBoard(Player.PLAYER_1);
         var boardPlayer2 = createBoard(Player.PLAYER_2);
-
-        var playersBoard = new HashMap<Player, Board>();
-        playersBoard.put(boardPlayer1.getPlayer(), boardPlayer1);
-        playersBoard.put(boardPlayer2.getPlayer(), boardPlayer2);
-        return playersBoard;
+        return Arrays.asList(boardPlayer1, boardPlayer2);
     }
 
     private static Board createBoard(final Player player) {
         var board = new Board();
-        //board.setId(2);
         board.setPlayer(player);
         board.setBigPit(new Pit(0, 0));
         board.setSmallPits(Arrays.asList(new Pit(1, 6),

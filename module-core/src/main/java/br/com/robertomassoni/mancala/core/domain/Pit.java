@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class Pit {
-    private Integer id;
+    private Integer index;
     private Integer seedCount;
 
     public void addOneSeed() {

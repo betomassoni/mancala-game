@@ -1,9 +1,13 @@
 package br.com.robertomassoni.mancala.rest.api.controller;
 
 import br.com.robertomassoni.mancala.core.service.GameService;
+import br.com.robertomassoni.mancala.rest.api.mapper.SowPitMapper;
+import br.com.robertomassoni.mancala.rest.api.request.SowPitRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,8 +21,15 @@ public class GameController {
     private GameService service;
 
     @PostMapping
-    public ResponseEntity<?> create() {
-        final var result = service.createNew();
+    public ResponseEntity<?> createGame() {
+        final var result = service.createGame();
+        return ResponseEntity.status(CREATED).body(result);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> sow(@RequestBody final SowPitRequest request) {
+        final var sow = SowPitMapper.INSTANCE.mapFrom(request);
+        final var result = service.sow(sow);
         return ResponseEntity.status(CREATED).body(result);
     }
 }
