@@ -14,8 +14,8 @@ public class GameMock {
     public static Game createNewGame() {
         var game = new Game();
         game.setId(UUID.randomUUID());
-        game.setPlayersBoard(Arrays.asList(BoardMock.createBoard(Player.PLAYER_1),
-                BoardMock.createBoard(Player.PLAYER_2)));
+        game.setPlayersBoard(Arrays.asList(BoardMock.create(Player.PLAYER_1),
+                BoardMock.create(Player.PLAYER_2)));
         game.setPlayerTurn(Player.PLAYER_1);
         return game;
     }
