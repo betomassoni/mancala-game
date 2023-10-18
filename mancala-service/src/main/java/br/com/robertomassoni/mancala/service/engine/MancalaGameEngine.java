@@ -4,7 +4,7 @@ import br.com.robertomassoni.mancala.core.domain.Board;
 import br.com.robertomassoni.mancala.core.domain.Game;
 import br.com.robertomassoni.mancala.core.domain.Pit;
 import br.com.robertomassoni.mancala.core.domain.enums.Player;
-import br.com.robertomassoni.mancala.core.exception.DuplicatePlayerMoveException;
+import br.com.robertomassoni.mancala.core.exception.PlayerCannotPlayException;
 import br.com.robertomassoni.mancala.core.exception.PlayerNotFoundException;
 import lombok.SneakyThrows;
 
@@ -27,7 +27,7 @@ public final class MancalaGameEngine {
 
     public static Game play(final Game game, Player player, final Integer pitIndex) {
         if (!game.getPlayerTurn().equals(player)) {
-            throw new DuplicatePlayerMoveException("The same player cannot play again");
+            throw new PlayerCannotPlayException("This player cannot play this round");
         }
         return new MancalaGameEngine(game, player).sow(player, pitIndex, 0);
     }
@@ -40,10 +40,10 @@ public final class MancalaGameEngine {
         if (remainingSeeds == 0) {
             sowSmallPitsPlayer(currentPlayerBoard, seedsToSow, pitIndex);
         } else {
-            sowSmallPitsOpponentPlayer(currentPlayerBoard, seedsToSow, pitIndex -1);
+            sowSmallPitsOpponentPlayer(currentPlayerBoard, seedsToSow, pitIndex - 1);
         }
 
-        if (isCurrentPlayerTurn(currentPlayerBoard)) {
+        if (isCurrentPlayerTurn(currentPlayerBoard) && isRemainingSeeds(seedsToSow)) {
             sowBigPit(currentPlayerBoard, seedsToSow);
         }
 
@@ -79,14 +79,14 @@ public final class MancalaGameEngine {
         getPitsToSow(currentPlayerBoard, pitIndex).stream()
                 .sorted(Comparator.comparingInt(Pit::getIndex))
                 .forEach(pit -> {
-            if (seedsToSow.get() > 0) {
-                pit.addOneSeed();
-                seedsToSow.getAndDecrement();
-                if (canCaptureOpponentSeeds(pit)) {
-                    scoreByCollectingOpponentSeeds(currentPlayerBoard, pit);
-                }
-            }
-        });
+                    if (seedsToSow.get() > 0) {
+                        pit.addOneSeed();
+                        seedsToSow.getAndDecrement();
+                        if (canCaptureOpponentSeeds(pit)) {
+                            scoreByCollectingOpponentSeeds(currentPlayerBoard, pit);
+                        }
+                    }
+                });
     }
 
     private void sowSmallPitsOpponentPlayer(final Board currentPlayerBoard, final AtomicInteger seedsToSow, final Integer pitIndex) {
@@ -124,14 +124,11 @@ public final class MancalaGameEngine {
     }
 
     private void sowBigPit(final Board currentPlayerBoard, AtomicInteger seedsToSow) {
-        if (isRemainingSeeds(seedsToSow)) {
-            currentPlayerBoard.getBigPit().addOneSeed();
-            if (isLastSeedToSow(seedsToSow)) {
-                this.shouldPlayAgain = true;
-            }
-            seedsToSow.getAndDecrement();
+        currentPlayerBoard.getBigPit().addOneSeed();
+        if (isLastSeedToSow(seedsToSow)) {
+            this.shouldPlayAgain = true;
         }
-
+        seedsToSow.getAndDecrement();
     }
 
     private static boolean isLastSeedToSow(AtomicInteger seedsToSow) {

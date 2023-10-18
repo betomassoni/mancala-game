@@ -1,6 +1,7 @@
 package br.com.robertomassoni.mancala.core.domain;
 
 import br.com.robertomassoni.mancala.core.domain.enums.Player;
+import br.com.robertomassoni.mancala.core.exception.PitNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,6 @@ public class Board {
         return smallPits.stream()
                 .filter(pit -> pit.getIndex().equals(pitId))
                 .findFirst()
-                .orElseThrow(() -> new Exception("Small Pit not found"));
+                .orElseThrow(() -> new PitNotFoundException("Small Pit not found"));
     }
 }

@@ -7,8 +7,4 @@ public class GameNotFoundException extends ApiException {
     public GameNotFoundException(final String message) {
         super(HttpStatus.NOT_FOUND, message);
     }
-
-    public GameNotFoundException() {
-        super(HttpStatus.NOT_FOUND);
-    }
 }

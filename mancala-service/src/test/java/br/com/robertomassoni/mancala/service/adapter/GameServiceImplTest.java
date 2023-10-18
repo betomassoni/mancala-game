@@ -2,7 +2,7 @@ package br.com.robertomassoni.mancala.service.adapter;
 
 import br.com.robertomassoni.mancala.core.domain.Pit;
 import br.com.robertomassoni.mancala.core.domain.enums.Player;
-import br.com.robertomassoni.mancala.core.exception.DuplicatePlayerMoveException;
+import br.com.robertomassoni.mancala.core.exception.PlayerCannotPlayException;
 import br.com.robertomassoni.mancala.core.repository.GamePersistence;
 import mock.BoardMock;
 import mock.GameMock;
@@ -303,7 +303,7 @@ class GameServiceImplTest {
         assertThatThrownBy(() -> {
             service.sow(SowPitMock.create().withPlayer(Player.PLAYER_1).withPitIndex(2));
             service.sow(SowPitMock.create().withPlayer(Player.PLAYER_1).withPitIndex(3));
-        }).isInstanceOf(DuplicatePlayerMoveException.class)
+        }).isInstanceOf(PlayerCannotPlayException.class)
                 .hasMessage("The same player cannot play again");
     }
 }
