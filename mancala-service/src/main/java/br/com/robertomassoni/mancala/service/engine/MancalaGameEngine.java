@@ -38,19 +38,9 @@ public final class MancalaGameEngine {
         final var currentPlayerBoard = findPlayerBoard(player);
         final var seedsToSow = new AtomicInteger(remainingSeeds > 0 ? remainingSeeds : currentPlayerBoard.getSmallPitById(pitIndex).getSeedCount());
 
-        if (seedsToSow.get() == 0) {
-            throw new InvalidMoveException("Invalid move because there is no seeds in this pit");
-        }
-
-        if (remainingSeeds == 0) {
-            sowSmallPitsPlayer(currentPlayerBoard, seedsToSow, pitIndex);
-        } else {
-            sowSmallPitsOpponentPlayer(currentPlayerBoard, seedsToSow, pitIndex - 1);
-        }
-
-        if (isCurrentPlayerTurn(currentPlayerBoard) && isRemainingSeeds(seedsToSow)) {
-            sowBigPit(currentPlayerBoard, seedsToSow);
-        }
+        throwExceptionIfIsInvalidMove(seedsToSow);
+        sowSmallPits(pitIndex, remainingSeeds, currentPlayerBoard, seedsToSow);
+        sowBigPit(currentPlayerBoard, seedsToSow);
 
         // Recursive call
         if (isRemainingSeeds(seedsToSow)) {
@@ -63,12 +53,26 @@ public final class MancalaGameEngine {
         return game;
     }
 
+    private void throwExceptionIfIsInvalidMove(final AtomicInteger seedsToSow) {
+        if (seedsToSow.get() == 0) {
+            throw new InvalidMoveException("Invalid move because there is no seeds in this pit");
+        }
+    }
+
+    private void sowSmallPits(final Integer pitIndex, final Integer remainingSeeds, final Board currentPlayerBoard, final AtomicInteger seedsToSow) {
+        if (remainingSeeds == 0) {
+            sowSmallPitsPlayer(currentPlayerBoard, seedsToSow, pitIndex);
+        } else {
+            sowSmallPitsOpponentPlayer(currentPlayerBoard, seedsToSow, pitIndex - 1);
+        }
+    }
+
     private void transferAllSeedsToBitPit(final Board board) {
         final var allSeedsInSmallPitCount = board.getSmallPits().stream().mapToInt(Pit::getSeedCount).sum();
         board.getBigPit().addSeed(allSeedsInSmallPitCount);
     }
 
-    private static boolean isOutOfSeeds(Board board) {
+    private boolean isOutOfSeeds(Board board) {
         return board.getSmallPits().stream().allMatch(pit -> pit.getSeedCount() == 0);
     }
 
@@ -140,11 +144,13 @@ public final class MancalaGameEngine {
     }
 
     private void sowBigPit(final Board currentPlayerBoard, AtomicInteger seedsToSow) {
-        currentPlayerBoard.getBigPit().addOneSeed();
-        if (isLastSeedToSow(seedsToSow)) {
-            this.shouldPlayAgain = true;
+        if (isCurrentPlayerTurn(currentPlayerBoard) && isRemainingSeeds(seedsToSow)) {
+            currentPlayerBoard.getBigPit().addOneSeed();
+            if (isLastSeedToSow(seedsToSow)) {
+                this.shouldPlayAgain = true;
+            }
+            seedsToSow.getAndDecrement();
         }
-        seedsToSow.getAndDecrement();
     }
 
     private boolean isLastSeedToSow(AtomicInteger seedsToSow) {
