@@ -19,6 +19,7 @@ public class Game {
     private UUID id;
     private List<Board> playersBoard;
     private Player playerTurn;
+    private Player winner;
 
     public Board getBoard(final Player player) {
         return this.playersBoard.stream()

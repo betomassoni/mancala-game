@@ -20,7 +20,7 @@ public class Board {
     private Pit bigPit;
     private Player player;
 
-    public Pit getSmallPitById(Integer pitId) throws Exception {
+    public Pit getSmallPitById(final Integer pitId) throws Exception {
         return smallPits.stream()
                 .filter(pit -> pit.getIndex().equals(pitId))
                 .findFirst()

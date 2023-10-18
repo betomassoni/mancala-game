@@ -2,6 +2,7 @@ package br.com.robertomassoni.mancala.service.adapter;
 
 import br.com.robertomassoni.mancala.core.domain.Pit;
 import br.com.robertomassoni.mancala.core.domain.enums.Player;
+import br.com.robertomassoni.mancala.core.exception.InvalidMoveException;
 import br.com.robertomassoni.mancala.core.exception.PlayerCannotPlayException;
 import br.com.robertomassoni.mancala.core.repository.GamePersistence;
 import mock.BoardMock;
@@ -304,6 +305,59 @@ class GameServiceImplTest {
             service.sow(SowPitMock.create().withPlayer(Player.PLAYER_1).withPitIndex(2));
             service.sow(SowPitMock.create().withPlayer(Player.PLAYER_1).withPitIndex(3));
         }).isInstanceOf(PlayerCannotPlayException.class)
-                .hasMessage("The same player cannot play again");
+                .hasMessage("This player cannot play this round");
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenPlayerTryToSowWithoutSeeds() {
+        var actualBoardPlayer1 = BoardMock.create(Player.PLAYER_1).withSmallPits(Arrays.asList(new Pit(1, 0),
+                new Pit(2, 0),
+                new Pit(3, 0),
+                new Pit(4, 0),
+                new Pit(5, 0),
+                new Pit(6, 6)));
+        var actualBoardPlayer2 = BoardMock.create(Player.PLAYER_2).withSmallPits(Arrays.asList(new Pit(1, 0),
+                new Pit(2, 0),
+                new Pit(3, 0),
+                new Pit(4, 0),
+                new Pit(5, 0),
+                new Pit(6, 6)));
+        var actualGame = GameMock.createNewGame().withPlayersBoard(Arrays.asList(actualBoardPlayer1, actualBoardPlayer2));
+        var actualSowPit = SowPitMock.create();
+        when(persistence.findById(any())).thenReturn(actualGame);
+        when(persistence.save(any())).thenReturn(actualGame);
+
+        assertThatThrownBy(() -> {
+            service.sow(actualSowPit.withPlayer(Player.PLAYER_1).withPitIndex(1));
+        }).isInstanceOf(InvalidMoveException.class)
+                .hasMessage("Invalid move because there is no seeds in this pit");
+    }
+
+    @Test
+    public void shouldSowOneSeedOnFourthPitAndNotScoreXXXXX() {
+        var actualBoardPlayer1 = BoardMock.create(Player.PLAYER_1).withSmallPits(Arrays.asList(new Pit(1, 0),
+                        new Pit(2, 0),
+                        new Pit(3, 0),
+                        new Pit(4, 0),
+                        new Pit(5, 0),
+                        new Pit(6, 1)))
+                .withBigPit(new Pit(0, 10));
+        var actualBoardPlayer2 = BoardMock.create(Player.PLAYER_2).withSmallPits(Arrays.asList(new Pit(1, 0),
+                        new Pit(2, 0),
+                        new Pit(3, 0),
+                        new Pit(4, 0),
+                        new Pit(5, 0),
+                        new Pit(6, 6)))
+                .withBigPit(new Pit(0, 10));
+        var actualGame = GameMock.createNewGame().withPlayersBoard(Arrays.asList(actualBoardPlayer1, actualBoardPlayer2));
+        var actualSowPit = SowPitMock.create();
+        when(persistence.findById(any())).thenReturn(actualGame);
+        when(persistence.save(any())).thenReturn(actualGame);
+
+        var expectedGame = service.sow(actualSowPit.withPlayer(Player.PLAYER_1).withPitIndex(6));
+
+        assertThat(expectedGame.getWinner()).isEqualTo(Player.PLAYER_2);
+        assertThat(expectedGame.getBoard(Player.PLAYER_2).getBigPit().getSeedCount()).isEqualTo(16);
+        assertThat(expectedGame.getBoard(Player.PLAYER_1).getBigPit().getSeedCount()).isEqualTo(11);
     }
 }

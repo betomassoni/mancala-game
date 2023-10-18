@@ -7,8 +7,4 @@ public class PitNotFoundException extends ApiException {
     public PitNotFoundException(final String message) {
         super(HttpStatus.NOT_FOUND, message);
     }
-
-    public PitNotFoundException() {
-        super(HttpStatus.NOT_FOUND);
-    }
 }
