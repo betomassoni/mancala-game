@@ -2,6 +2,7 @@ package br.com.robertomassoni.mancala.service.adapter;
 
 import br.com.robertomassoni.mancala.core.domain.Pit;
 import br.com.robertomassoni.mancala.core.domain.enums.Player;
+import br.com.robertomassoni.mancala.core.exception.DuplicatePlayerMoveException;
 import br.com.robertomassoni.mancala.core.repository.GamePersistence;
 import mock.BoardMock;
 import mock.GameMock;
@@ -117,9 +118,9 @@ class GameServiceImplTest {
         when(persistence.findById(any())).thenReturn(actualGame);
         when(persistence.save(any())).thenReturn(actualGame);
 
-        var expectedGameAfterFirstPlay = service.sow(SowPitMock.create().withPlayer(Player.PLAYER_1).withPitIndex(1));
-        var expectedGameAfterSecondPlay = service.sow(SowPitMock.create().withPlayer(Player.PLAYER_2).withPitIndex(1));
-        var expectedGameAfterThirdPlay = service.sow(SowPitMock.create().withPlayer(Player.PLAYER_1).withPitIndex(2));
+        service.sow(SowPitMock.create().withPlayer(Player.PLAYER_1).withPitIndex(2));
+        service.sow(SowPitMock.create().withPlayer(Player.PLAYER_2).withPitIndex(2));
+        var expectedGameAfterThirdPlay = service.sow(SowPitMock.create().withPlayer(Player.PLAYER_1).withPitIndex(3));
 
         assertThat(expectedGameAfterThirdPlay.getBoard(Player.PLAYER_1).getBigPit().getSeedCount()).isEqualTo(2);
     }
@@ -127,14 +128,14 @@ class GameServiceImplTest {
     @Test
     public void shouldRemoveAllSeedsFromSmallPitAfterPlay() {
         var actualGame = GameMock.createNewGame();
-        var actualSowPit = SowPitMock.create().withPlayer(Player.PLAYER_1).withPitIndex(1);
+        var actualSowPit = SowPitMock.create();
         when(persistence.findById(any())).thenReturn(actualGame);
         when(persistence.save(any())).thenReturn(actualGame);
 
-        var expectedGameAfterFirstPlay = service.sow(actualSowPit);
-        var expectedGameAfterSecondPlay = service.sow(actualSowPit.withPitIndex(2));
+        service.sow(actualSowPit.withPitIndex(2).withPlayer(Player.PLAYER_1));
+        var expectedGame = service.sow(actualSowPit.withPitIndex(3).withPlayer(Player.PLAYER_2));
 
-        assertThat(expectedGameAfterSecondPlay.getBoard(Player.PLAYER_1).getSmallPits().get(0).getSeedCount()).isEqualTo(0);
+        assertThat(expectedGame.getBoard(Player.PLAYER_2).getSmallPits().get(2).getSeedCount()).isZero();
     }
 
     @Test
@@ -300,9 +301,9 @@ class GameServiceImplTest {
         when(persistence.save(any())).thenReturn(actualGame);
 
         assertThatThrownBy(() -> {
-            var expectedGame = service.sow(SowPitMock.create().withPlayer(Player.PLAYER_1).withPitIndex(1));
-            when(persistence.save(any())).thenReturn(expectedGame);
             service.sow(SowPitMock.create().withPlayer(Player.PLAYER_1).withPitIndex(2));
-        }).isInstanceOf(Exception.class);
+            service.sow(SowPitMock.create().withPlayer(Player.PLAYER_1).withPitIndex(3));
+        }).isInstanceOf(DuplicatePlayerMoveException.class)
+                .hasMessage("The same player cannot play again");
     }
 }

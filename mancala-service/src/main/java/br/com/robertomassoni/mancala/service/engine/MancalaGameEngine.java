@@ -17,10 +17,12 @@ public final class MancalaGameEngine {
 
     private Game game;
     private Player player;
+    private boolean shouldPlayAgain;
 
     private MancalaGameEngine(final Game game, final Player player) {
         this.game = game;
         this.player = player;
+        this.shouldPlayAgain = false;
     }
 
     public static Game play(final Game game, Player player, final Integer pitIndex) {
@@ -124,9 +126,16 @@ public final class MancalaGameEngine {
     private void sowBigPit(final Board currentPlayerBoard, AtomicInteger seedsToSow) {
         if (isRemainingSeeds(seedsToSow)) {
             currentPlayerBoard.getBigPit().addOneSeed();
+            if (isLastSeedToSow(seedsToSow)) {
+                this.shouldPlayAgain = true;
+            }
             seedsToSow.getAndDecrement();
         }
 
+    }
+
+    private static boolean isLastSeedToSow(AtomicInteger seedsToSow) {
+        return seedsToSow.get() == 1;
     }
 
     private static boolean isRemainingSeeds(AtomicInteger seedsToSow) {
@@ -134,6 +143,10 @@ public final class MancalaGameEngine {
     }
 
     private void defineNextPlayer() {
-        this.game.setPlayerTurn(getOpponentPlayer(this.player));
+        if (this.shouldPlayAgain) {
+            this.game.setPlayerTurn(this.player);
+        } else {
+            this.game.setPlayerTurn(getOpponentPlayer(this.player));
+        }
     }
 }
