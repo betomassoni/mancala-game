@@ -10,4 +10,7 @@ import java.util.List;
 public class GameResponse {
     private String id;
     private List<BoardResponse> playersBoard;
+    private String playerTurn;
+    private String winner;
+    private String status;
 }

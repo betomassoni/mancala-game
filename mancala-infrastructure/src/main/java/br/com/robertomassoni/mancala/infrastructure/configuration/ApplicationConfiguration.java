@@ -1,5 +1,6 @@
 package br.com.robertomassoni.mancala.infrastructure.configuration;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -16,6 +17,7 @@ public class ApplicationConfiguration {
 
         return JsonMapper.builder()
                 .propertyNamingStrategy(new PropertyNamingStrategies.SnakeCaseStrategy())
+                .serializationInclusion(JsonInclude.Include.NON_NULL)
                 .build();
     }
 }

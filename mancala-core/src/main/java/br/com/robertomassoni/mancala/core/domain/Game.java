@@ -1,6 +1,7 @@
 package br.com.robertomassoni.mancala.core.domain;
 
 import br.com.robertomassoni.mancala.core.domain.enums.Player;
+import br.com.robertomassoni.mancala.core.domain.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ public class Game {
     private List<Board> playersBoard;
     private Player playerTurn;
     private Player winner;
+    private Status status;
 
     public Board getBoard(final Player player) {
         return this.playersBoard.stream()

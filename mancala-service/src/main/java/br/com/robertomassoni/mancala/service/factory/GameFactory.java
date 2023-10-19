@@ -4,6 +4,7 @@ import br.com.robertomassoni.mancala.core.domain.Board;
 import br.com.robertomassoni.mancala.core.domain.Game;
 import br.com.robertomassoni.mancala.core.domain.Pit;
 import br.com.robertomassoni.mancala.core.domain.enums.Player;
+import br.com.robertomassoni.mancala.core.domain.enums.Status;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ public class GameFactory {
         game.setId(UUID.randomUUID());
         game.setPlayersBoard(createPlayersBoard());
         game.setPlayerTurn(Player.PLAYER_1);
+        game.setStatus(Status.IN_PROGRESS);
         return game;
     }
 

@@ -16,4 +16,6 @@ public class GameEntity {
     private UUID id;
     private List<BoardEntity> playersBoard;
     private String playerTurn;
+    private String winner;
+    private String status;
 }

@@ -2,6 +2,7 @@ package br.com.robertomassoni.mancala.service.adapter;
 
 import br.com.robertomassoni.mancala.core.domain.Pit;
 import br.com.robertomassoni.mancala.core.domain.enums.Player;
+import br.com.robertomassoni.mancala.core.domain.enums.Status;
 import br.com.robertomassoni.mancala.core.exception.InvalidMoveException;
 import br.com.robertomassoni.mancala.core.exception.PlayerCannotPlayException;
 import br.com.robertomassoni.mancala.core.repository.GamePersistence;
@@ -359,5 +360,30 @@ class GameServiceImplTest {
         assertThat(expectedGame.getWinner()).isEqualTo(Player.PLAYER_2);
         assertThat(expectedGame.getBoard(Player.PLAYER_2).getBigPit().getSeedCount()).isEqualTo(16);
         assertThat(expectedGame.getBoard(Player.PLAYER_1).getBigPit().getSeedCount()).isEqualTo(11);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenPlayerTryToSowAndGameIsAlreadyFinished() {
+        var actualBoardPlayer1 = BoardMock.create(Player.PLAYER_1).withSmallPits(Arrays.asList(new Pit(1, 0),
+                new Pit(2, 0),
+                new Pit(3, 0),
+                new Pit(4, 0),
+                new Pit(5, 1),
+                new Pit(6, 0)));
+        var actualBoardPlayer2 = BoardMock.create(Player.PLAYER_2).withSmallPits(Arrays.asList(new Pit(1, 0),
+                new Pit(2, 0),
+                new Pit(3, 0),
+                new Pit(4, 0),
+                new Pit(5, 0),
+                new Pit(6, 6)));
+        var actualGame = GameMock.createNewGame().withPlayersBoard(Arrays.asList(actualBoardPlayer1, actualBoardPlayer2)).withStatus(Status.FINISHED);
+        var actualSowPit = SowPitMock.create();
+        when(persistence.findById(any())).thenReturn(actualGame);
+        when(persistence.save(any())).thenReturn(actualGame);
+
+        assertThatThrownBy(() -> {
+            service.sow(actualSowPit.withPlayer(Player.PLAYER_1).withPitIndex(5));
+        }).isInstanceOf(InvalidMoveException.class)
+                .hasMessage("Invalid move because this game is already finished");
     }
 }
