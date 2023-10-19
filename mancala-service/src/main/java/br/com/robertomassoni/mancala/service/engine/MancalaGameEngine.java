@@ -8,6 +8,7 @@ import br.com.robertomassoni.mancala.core.domain.enums.Status;
 import br.com.robertomassoni.mancala.core.exception.InvalidMoveException;
 import br.com.robertomassoni.mancala.core.exception.PlayerCannotPlayException;
 import br.com.robertomassoni.mancala.core.exception.PlayerNotFoundException;
+import br.com.robertomassoni.mancala.service.factory.GameFactory;
 import lombok.SneakyThrows;
 
 import java.util.Comparator;
@@ -29,6 +30,10 @@ public final class MancalaGameEngine {
         this.game = game;
         this.player = player;
         this.shouldPlayAgain = false;
+    }
+
+    public static Game createGame() {
+        return GameFactory.createGame();
     }
 
     public static Game play(final Game game, Player player, final Integer pitIndex) {

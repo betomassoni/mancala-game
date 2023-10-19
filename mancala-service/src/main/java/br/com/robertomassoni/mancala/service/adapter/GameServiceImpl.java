@@ -19,7 +19,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Game createGame() {
-        return persistence.save(GameFactory.createGame());
+        return persistence.save(MancalaGameEngine.createGame());
     }
 
     @Override
