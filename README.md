@@ -53,6 +53,5 @@ mvn clean test -f mancala-e2e/pom.xml -Dtest=JUnitRunner
 - CheckStyle
 - Maven
 - Redis
-- MySQL
 - Swagger2
 - Docker
