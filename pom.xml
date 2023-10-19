@@ -23,6 +23,7 @@
         <module>mancala-service</module>
         <module>mancala-infrastructure</module>
         <module>mancala-repository-redis</module>
+        <module>mancala-e2e</module>
     </modules>
 
     <properties>

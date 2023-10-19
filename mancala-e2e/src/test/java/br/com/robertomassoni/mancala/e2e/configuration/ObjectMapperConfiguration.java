@@ -1,0 +1,22 @@
+package br.com.robertomassoni.mancala.e2e.configuration;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+
+@Configuration
+public class ObjectMapperConfiguration {
+    @Bean
+    @Primary
+    public ObjectMapper objectMapper() {
+
+        return JsonMapper.builder()
+                .propertyNamingStrategy(new PropertyNamingStrategies.SnakeCaseStrategy())
+                .serializationInclusion(JsonInclude.Include.NON_NULL)
+                .build();
+    }
+}
