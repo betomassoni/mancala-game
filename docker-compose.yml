@@ -1,23 +1,48 @@
-version: "2.1"
+version: "3"
 
 services:
-#  api:
-#    image: robertomassoni/mancala-game
-#    build:
-#      context: .
-#    restart: on-failure
-#    ports:
-#      - "8081:8080"
-#    networks:
-#      - web
 
   redis:
+    container_name: redis
+    hostname: redis
     image: redis:latest
     restart: on-failure
     ports:
       - "6379:6379"
     networks:
       - web
+
+  api:
+    container_name: api
+    image: robertomassoni/mancala-game
+    build:
+      context: .
+    restart: on-failure
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      APP_DATABASE_HOST: redis
+      APP_DATABASE_PORT: 6379
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+    networks:
+      - web
+
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    restart: on-failure
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: redis:6379
+    ports:
+      - "8081:8081"
+    networks:
+      - web
+    depends_on:
+      - redis
 
 networks:
   web:
