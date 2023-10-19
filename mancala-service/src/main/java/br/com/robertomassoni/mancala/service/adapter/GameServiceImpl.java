@@ -5,7 +5,6 @@ import br.com.robertomassoni.mancala.core.domain.SowPit;
 import br.com.robertomassoni.mancala.core.repository.GamePersistence;
 import br.com.robertomassoni.mancala.core.service.GameService;
 import br.com.robertomassoni.mancala.service.engine.MancalaGameEngine;
-import br.com.robertomassoni.mancala.service.factory.GameFactory;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
