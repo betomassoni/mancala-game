@@ -7,6 +7,9 @@ This is a sample project that demonstrates the integration of an Angular fronten
 * Sow seeds
 
 
+  ![game-screen.png](docs%2Fgame-screen.png)
+
+
 This project consists of two main components:
 
 1. **Angular Frontend:** A user interface developed in Angular that allows users to interact with the Mancala game, view game data, and make game moves.
