@@ -10,8 +10,8 @@
       <h2>{{helpMessage}}</h2>
       <h2><div id="resultado"></div></h2>
     </div>
-    <div class="col-md-2 text-right">
-      <button type="button" class="btn btn-default btn-lg active" (click)="createGame()">New Game</button>
+    <div class="col-md-2 d-flex justify-content-end">
+      <button type="button" class="btn btn-primary btn-lg" (click)="createGame()">New Game</button>
     </div>
   </div>
 
@@ -22,13 +22,13 @@
         <div class="row-board">
 
           <div class="row-player player-two">
-            <div *ngFor="let item of boardPlayer2?.small_pits" class="small-pit {{player1Turn ? 'player-turn' : ''}}" (click)="sowPit('PLAYER_2', item.index)">
+            <div *ngFor="let item of boardPlayer2?.small_pits" class="small-pit {{player1Turn ? 'not-player-turn' : ''}}" (click)="sowPit('PLAYER_2', item.index)">
               <p>{{item.seed_count}}</p>
             </div>
           </div>
 
           <div class="row-player player-one">
-            <div *ngFor="let item of boardPlayer1?.small_pits" class="small-pit {{player1Turn ? '' : 'player-turn'}}" (click)="sowPit('PLAYER_1', item.index)">
+            <div *ngFor="let item of boardPlayer1?.small_pits" class="small-pit {{player1Turn ? '' : 'not-player-turn'}}" (click)="sowPit('PLAYER_1', item.index)">
               <p>{{item.seed_count}}</p>
             </div>
           </div>

@@ -3,6 +3,8 @@
 }
 
 .board {
+    background-color: #042940;
+    color: #082940;
     margin: 20px 0 0 0;
     display: flex;
     flex-flow: row;
@@ -25,6 +27,19 @@
 .big-pit {
     flex: 1;
     border-radius: 50px;
+    background-color: #b362ff;
+}
+
+.small-pit {
+    flex: 1;
+    border-radius: 50%;
+    background-color: #9FC131;
+
+}
+
+.small-pit:hover {
+    background-color: #DBF227;
+    cursor: pointer;
 }
 
 .row-player {
@@ -41,7 +56,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0,0,0,.15);
     box-shadow: inset 0 0 2px rgba(0,0,0,.5);
     cursor: default;
 
@@ -59,17 +73,9 @@
     margin: 0px;
 }
 
-.small-pit {
-    flex: 1;
-    border-radius: 50%;
-    cursor: pointer;
-}
-.small-pit:hover {
-    background-color: #c2c2c2;
-}
-
-.player-turn {
+.not-player-turn {
   cursor: not-allowed;
   pointer-events: none;
+  background-color: #b362ff;
 }
 
