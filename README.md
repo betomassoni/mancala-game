@@ -41,6 +41,8 @@ npm install
 npm start
 ````
 
+Then the application will run on the default port 4200: http://localhost:4200/
+
 ## How to run end-2-end tests with Cucumber
 With the application running, execute the command below:
 ````
@@ -75,3 +77,6 @@ http://localhost:8080/v3/api-docs
 - Docker
 - RestAssured
 - Angular
+
+## Next steps
+- Implement a WebSocket system to allow two players to play the game in different browsers in real-time
