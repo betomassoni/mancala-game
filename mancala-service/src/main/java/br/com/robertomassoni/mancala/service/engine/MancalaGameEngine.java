@@ -116,7 +116,7 @@ public final class MancalaGameEngine {
                     if (seedsToSow.get() > 0) {
                         pit.addOneSeed();
                         seedsToSow.getAndDecrement();
-                        if (canCaptureOpponentSeeds(pit)) {
+                        if (canCaptureOpponentSeeds(pit, seedsToSow.get())) {
                             scoreByCollectingOpponentSeeds(currentPlayerBoard, pit);
                         }
                     }
@@ -133,8 +133,10 @@ public final class MancalaGameEngine {
         });
     }
 
-    private boolean canCaptureOpponentSeeds(final Pit currentPit) {
-        return currentPit.getSeedCount() == 1 && getOppositePit(currentPit).getSeedCount() > 0;
+    private boolean canCaptureOpponentSeeds(final Pit currentPit, final Integer seedsToSow) {
+        return currentPit.getSeedCount() == 1
+                && getOppositePit(currentPit).getSeedCount() > 0
+                && seedsToSow == 0;
     }
 
     private void scoreByCollectingOpponentSeeds(final Board currentPlayerBoard, final Pit currentPit) {

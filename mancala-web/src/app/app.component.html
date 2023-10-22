@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="text-center">Welcome to Mancala Game!</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-10 text-left">
+      <h2>{{game?.player_turn}}</h2>
+      <h2><div id="resultado"></div></h2>
+    </div>
+    <div class="col-md-2 text-right p-5">
+      <button type="button" class="btn btn-default btn-lg active" (click)="createGame()" [disabled]="true">New Game</button>
+    </div>
+  </div>
+
+  <div class="row text-center">
+    <div class="col-md-12">
+      <div class="board">
+        <div class="player-two big-pit"><p>{{boardPlayer2?.big_pit?.seed_count}}</p></div>
+        <div class="row-board">
+          
+          <div class="row-player player-two">                
+            <div *ngFor="let item of boardPlayer2?.small_pits" class="small-pit" (click)="sowPit('PLAYER_2', item.index)">
+              <p>{{item.seed_count}}</p>
+            </div>
+          </div>
+
+          <div class="row-player player-one">            
+            <div *ngFor="let item of boardPlayer1?.small_pits" class="small-pit" (click)="sowPit('PLAYER_1', item.index)">
+              <p>{{item.seed_count}}</p>
+            </div>
+          </div>
+
+        </div>
+        <div class="player-one big-pit"><p>{{boardPlayer1?.big_pit?.seed_count}}</p></div>
+      </div>
+    </div>
+  </div>
+  <h3>{{errorMessage}}</h3>
+</div>

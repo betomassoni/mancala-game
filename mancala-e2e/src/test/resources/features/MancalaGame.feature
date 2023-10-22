@@ -80,3 +80,12 @@ Feature: Test de feature
     And the PLAYER_1 sow his small pit number 3
     And the PLAYER_2 sow his small pit number 6
     Then a client error should occur
+
+  @Mancala
+  Scenario: Player 2 collect 2 seeds in his big pit
+    Given Make a POST request to create a new game
+    When the PLAYER_1 sow his small pit number 3
+    And the PLAYER_2 sow his small pit number 6
+    And the PLAYER_1 sow his small pit number 4
+    And the PLAYER_2 sow his small pit number 2
+    Then PLAYER_2 score 2 seeds in his big pit
