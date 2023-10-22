@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import { Game } from './model/Game';
 import { Board } from './model/Board';
 import { GameService } from '../app/service/GameService';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-root',
@@ -11,11 +12,11 @@ import { GameService } from '../app/service/GameService';
 export class AppComponent implements OnInit {
   title = 'mancala-web';
   game: Game | null = null;
-  boardPlayer1: Board | undefined = undefined; 
+  boardPlayer1: Board | undefined = undefined;
   boardPlayer2: Board | undefined = undefined;
-  errorMessage: string | null = null;
+  playerTurnMessage: string | null = null;
 
-  constructor(private gameService: GameService) { }
+  constructor(private gameService: GameService, private toastr: ToastrService) { }
 
   ngOnInit() {
       this.createGame();
@@ -27,6 +28,7 @@ export class AppComponent implements OnInit {
         this.game = response;
         this.boardPlayer1 = response.players_board.find((board: Board)  => board.player === 'PLAYER_1');
         this.boardPlayer2 = response.players_board.find((board: Board) => board.player === 'PLAYER_2');
+        this.playerTurnMessage = "It's player 1's turn!";
       }
     );
   }
@@ -38,9 +40,17 @@ export class AppComponent implements OnInit {
         this.game = response;
         this.boardPlayer1 = response.players_board.find((board: Board)  => board.player === 'PLAYER_1');
         this.boardPlayer2 = response.players_board.find((board: Board) => board.player === 'PLAYER_2');
+
+        if (this.game.player_turn === 'PLAYER_1') {
+          this.playerTurnMessage = "It's player 1's turn!";
+        } else {
+          this.playerTurnMessage = "It's player 2's turn!";
+        }
+
+
       },
       error: (error: any) => {
-        this.errorMessage = error.error.message;
+        this.toastr.error(error.error.message, 'Error');
       }
     });
   }

@@ -1,3 +1,7 @@
+.container {
+    max-width: 1150px;
+}
+
 .board {
     margin: 20px 0 0 0;
     display: flex;
@@ -63,4 +67,7 @@
 .small-pit:hover {
     background-color: #c2c2c2;
 }
+
+
+
 
