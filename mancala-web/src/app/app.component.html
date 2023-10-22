@@ -7,7 +7,7 @@
 
   <div class="row pt-5">
     <div class="col-md-10 text-left">
-      <h2>{{playerTurnMessage}}</h2>
+      <h2>{{helpMessage}}</h2>
       <h2><div id="resultado"></div></h2>
     </div>
     <div class="col-md-2 text-right">
@@ -22,13 +22,13 @@
         <div class="row-board">
 
           <div class="row-player player-two">
-            <div *ngFor="let item of boardPlayer2?.small_pits" class="small-pit" (click)="sowPit('PLAYER_2', item.index)">
+            <div *ngFor="let item of boardPlayer2?.small_pits" class="small-pit {{player1Turn ? 'player-turn' : ''}}" (click)="sowPit('PLAYER_2', item.index)">
               <p>{{item.seed_count}}</p>
             </div>
           </div>
 
           <div class="row-player player-one">
-            <div *ngFor="let item of boardPlayer1?.small_pits" class="small-pit" (click)="sowPit('PLAYER_1', item.index)">
+            <div *ngFor="let item of boardPlayer1?.small_pits" class="small-pit {{player1Turn ? '' : 'player-turn'}}" (click)="sowPit('PLAYER_1', item.index)">
               <p>{{item.seed_count}}</p>
             </div>
           </div>

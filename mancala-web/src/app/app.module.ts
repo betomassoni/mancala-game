@@ -13,7 +13,7 @@ import { ToastrModule } from 'ngx-toastr';
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot({positionClass: 'toast-bottom-right'})
+    ToastrModule.forRoot({positionClass: 'toast-top-right'})
   ],
   providers: [],
   bootstrap: [AppComponent]

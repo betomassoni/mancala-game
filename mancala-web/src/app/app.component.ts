@@ -14,7 +14,9 @@ export class AppComponent implements OnInit {
   game: Game | null = null;
   boardPlayer1: Board | undefined = undefined;
   boardPlayer2: Board | undefined = undefined;
-  playerTurnMessage: string | null = null;
+  helpMessage: string | null = null;
+  winner: string | null = null;
+  player1Turn:boolean = true;
 
   constructor(private gameService: GameService, private toastr: ToastrService) { }
 
@@ -28,7 +30,8 @@ export class AppComponent implements OnInit {
         this.game = response;
         this.boardPlayer1 = response.players_board.find((board: Board)  => board.player === 'PLAYER_1');
         this.boardPlayer2 = response.players_board.find((board: Board) => board.player === 'PLAYER_2');
-        this.playerTurnMessage = "It's player 1's turn!";
+        this.helpMessage = "It's player 1's turn!";
+        this.player1Turn = true;
       }
     );
   }
@@ -42,11 +45,16 @@ export class AppComponent implements OnInit {
         this.boardPlayer2 = response.players_board.find((board: Board) => board.player === 'PLAYER_2');
 
         if (this.game.player_turn === 'PLAYER_1') {
-          this.playerTurnMessage = "It's player 1's turn!";
+          this.helpMessage = "It's player 1's turn!";
+          this.player1Turn = true;
         } else {
-          this.playerTurnMessage = "It's player 2's turn!";
+          this.helpMessage = "It's player 2's turn!";
+          this.player1Turn = false;
         }
 
+        if (this.game.winner !== undefined) {
+          this.helpMessage = this.game.winner === 'PLAYER_1' ? 'Player 1 is the winner!' : 'Player 2 is the winner!';
+        }
 
       },
       error: (error: any) => {

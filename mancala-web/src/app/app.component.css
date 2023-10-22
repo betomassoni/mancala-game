@@ -68,6 +68,8 @@
     background-color: #c2c2c2;
 }
 
-
-
+.player-turn {
+  cursor: not-allowed;
+  pointer-events: none;
+}
 
